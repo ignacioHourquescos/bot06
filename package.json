@@ -5,7 +5,6 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc",
     "dev": "node src/index.ts",
     "format": "prettier -w src/*.{html,ts} config.ts package.json"
   },
