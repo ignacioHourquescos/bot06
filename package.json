@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc",
+    "heroku-postbuild": "npm run build",
     "dev": "node src/index.ts",
     "format": "prettier -w src/*.{html,ts} config.ts package.json"
   },
