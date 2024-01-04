@@ -5,6 +5,7 @@ import {
   sendRouteHandler,
   broadCastRouteHandler,
 } from "./routeHandlers";
+import { config } from "dotenv";
 
 io.on("connection", () => {
   io.emit("status", status);
@@ -15,7 +16,7 @@ app.post("/send", sendRouteHandler);
 app.post("/broadcast", broadCastRouteHandler);
 
 // listen on port 3000
-server.listen(3000, () => {
+server.listen(config.server.port, () => {
   client.initialize();
   console.log("Server listening on port 3000");
 });
