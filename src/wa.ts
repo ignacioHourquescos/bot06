@@ -35,9 +35,10 @@ client.on("ready", () => {
 });
 
 client.on("message", (msg) => {
+  console.log("HOLA");
   console.log(JSON.stringify(msg, null, 2));
 
-  if (msg.id.fromMe) return;
+  // if (msg.id.fromMe) return;
 
   if (msg.body === "!ping") {
     msg.reply("pong!");
