@@ -5,7 +5,7 @@ import {
   sendRouteHandler,
   broadCastRouteHandler,
 } from "./routeHandlers";
-import { config } from "dotenv";
+import { config } from "./config/config";
 
 io.on("connection", () => {
   io.emit("status", status);
