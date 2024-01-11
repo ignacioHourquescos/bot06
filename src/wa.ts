@@ -2,6 +2,8 @@ import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode";
 import { io } from "./server";
 import config from "../config";
+import detectIntention from "./utils/detect-intention";
+import welcomeFlow from "./flows/welcome-flow";
 
 export let qrBase64: string | null = null;
 export let status: "ready" | "pending" | "unauthenticated" | "authenticated" =
@@ -34,15 +36,52 @@ client.on("ready", () => {
   console.log("Client is ready!");
 });
 
+// client.on("message_reaction", (msg) => {
+//   console.log(msg);
+// });
+
+// client.on("message_ack", (msg) => {
+//   console.log(msg);
+// });
+
+client.on("message_create", (msg) => {
+  console.log("MESSAGE CREATE", msg);
+});
+
 client.on("message", (msg) => {
-  console.log("HOLA");
-  console.log(JSON.stringify(msg, null, 2));
+  console.log("ENTRO A FLOW");
+  // console.log(JSON.stringify(msg, null, 2));
 
-  // if (msg.id.fromMe) return;
+  const { from, to, body, deviceType } = msg;
 
-  if (msg.body === "!ping") {
-    msg.reply("pong!");
-  } else {
-    msg.reply("Hello!");
+  async function handleIncomingMessage(msg: any) {
+    if (from != "5491165106333@c.us") {
+      return;
+    } else {
+      console.log("ENTRE ACA A LA FUNCTION");
+      try {
+        const intentionDetected = await detectIntention(msg.body);
+        if (intentionDetected) {
+          console.log(msg);
+          client.sendMessage(from, intentionDetected);
+        } else {
+          client.sendMessage(from, welcomeFlow());
+        }
+      } catch (error) {
+        console.error("Error detecting intention:", error);
+        // Handle error
+      }
+    }
   }
+
+  handleIncomingMessage(msg);
+
+  // if (from != "5491165106333@c.us") {
+  //   return;
+  // } else if (detectIntention(msg.body)) {
+  //   msg.reply("Intencion detectada");
+  //   return;
+  // } else {
+  //   msg.reply(defaultMessage());
+  // }
 });
