@@ -44,9 +44,9 @@ client.on("ready", () => {
 //   console.log(msg);
 // });
 
-client.on("message_create", (msg) => {
-  console.log("MESSAGE CREATE", msg);
-});
+// client.on("message_create", (msg) => {
+//   console.log("MESSAGE CREATE", msg);
+// });
 
 client.on("message", (msg) => {
   console.log("ENTRO A FLOW");
@@ -55,33 +55,22 @@ client.on("message", (msg) => {
   const { from, to, body, deviceType } = msg;
 
   async function handleIncomingMessage(msg: any) {
-    if (from != "5491165106333@c.us") {
-      return;
-    } else {
+    if (from == "5491165106333@c.us") {
       console.log("ENTRE ACA A LA FUNCTION");
       try {
-        const intentionDetected = await detectIntention(msg.body);
+        const intentionDetected = await detectIntention(from, msg.body);
         if (intentionDetected) {
-          console.log(msg);
           client.sendMessage(from, intentionDetected);
         } else {
           client.sendMessage(from, welcomeFlow());
         }
       } catch (error) {
         console.error("Error detecting intention:", error);
-        // Handle error
       }
+    } else {
+      return;
     }
   }
 
   handleIncomingMessage(msg);
-
-  // if (from != "5491165106333@c.us") {
-  //   return;
-  // } else if (detectIntention(msg.body)) {
-  //   msg.reply("Intencion detectada");
-  //   return;
-  // } else {
-  //   msg.reply(defaultMessage());
-  // }
 });

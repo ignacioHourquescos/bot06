@@ -11,22 +11,26 @@ async function intentionXref(message: string): Promise<any> {
 
   try {
     const response = await get_xref(code);
+    console.log(response);
     const data = response.results;
     const suggestions = response.suggestions;
 
     let formattedResponse = "";
 
-    for (let item of data) {
-      for (let key in item) {
-        formattedResponse += `*${key.toUpperCase()}:* ${item[key]}\n`;
+    if (response.results.length > 0) {
+      formattedResponse += `Te paso el listado de equivalencias:\n\n`;
+      for (let item of data) {
+        for (let key in item) {
+          formattedResponse += `*${key.toUpperCase()}:* ${item[key]}\n`;
+        }
       }
-    }
-
-    if (suggestions.length > 0) {
-      formattedResponse += `\n*Suggestions:*\n`;
+    } else if (suggestions.length > 0) {
+      formattedResponse += `No encontré equivalencias para el articulo.\nTe paso un listado de articulos similares:\n\n`;
       for (let suggestion of suggestions) {
-        formattedResponse += `- ${suggestion}\n`;
+        formattedResponse += `*${suggestion}*\n`;
       }
+    } else {
+      formattedResponse = `No encontre ningúna equivalencia, ni articulo similar al que me pasaste.`;
     }
 
     return formattedResponse;
