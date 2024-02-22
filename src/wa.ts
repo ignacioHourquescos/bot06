@@ -56,7 +56,6 @@ client.on("message", (msg) => {
 
   async function handleIncomingMessage(msg: any) {
     if (from == "5491165106333@c.us") {
-      console.log("ENTRE ACA A LA FUNCTION");
       try {
         const intentionDetected = await detectIntention(from, msg.body);
         if (intentionDetected) {

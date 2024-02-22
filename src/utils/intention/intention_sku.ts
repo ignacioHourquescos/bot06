@@ -10,7 +10,6 @@ async function intentionSku(message: string): Promise<any> {
   let code: string | null = extractCodeFromMessage(message);
   try {
     const response = await get_sku(code);
-    console.log("ACA EST ALA DATA", response);
     let parsedResponse = "";
     for (let item of response) {
       parsedResponse +=

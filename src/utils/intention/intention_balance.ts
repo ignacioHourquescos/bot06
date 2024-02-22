@@ -16,12 +16,9 @@ interface Invoice {
 }
 async function intentionBalance(from: any): Promise<string> {
   let phoneNumber: string | null = extractPhoneNumber(from);
-  let phoneNumberTestClienteTettamanti: string = "46879532"; // Ensure phoneNumberTestClienteTettamanti is of type string
+  // phoneNumber = "45523070";
 
-  console.log(
-    "NUMERO DE TELEFONO FORMATEADO",
-    phoneNumberTestClienteTettamanti
-  );
+  console.log("NUMERO DE TELEFONO FORMATEADO", phoneNumber);
 
   // Mapping of TIPO values to corresponding words
   const tipoMapping: { [key: string]: string } = {
@@ -43,9 +40,7 @@ async function intentionBalance(from: any): Promise<string> {
   };
 
   try {
-    const response: Invoice[] = await get_balance(
-      phoneNumberTestClienteTettamanti
-    );
+    const response: Invoice[] = await get_balance(phoneNumber);
     console.log("ACA RESPUESTA DE EP DE BALANCE", response);
 
     // Format the response
@@ -64,7 +59,7 @@ async function intentionBalance(from: any): Promise<string> {
 
       const tipoWord = tipoMapping[invoice.TIPO] || invoice.TIPO;
 
-      return `*${tipoWord} ${invoice.NUM}* (${formattedDate}) => ${formattedTotal}`;
+      return `*${tipoWord} ${invoice.NUM}* (${formattedDate})      ${formattedTotal}`;
     });
 
     // Add line breaks between each item
@@ -80,8 +75,12 @@ async function intentionBalance(from: any): Promise<string> {
       currency: "ARS",
     }).format(totalSum);
 
-    // Add total sum to the response
-    formattedResponse.push(`\n *Total: ${formattedTotalSum}*`);
+    const totalSumNumber = Number(totalSum); // Convert totalSum to a number
+    if (totalSumNumber === 0) {
+      formattedResponse.push(`*No tiene saldos pendientes*`);
+    } else {
+      formattedResponse.push(`\n *Saldo Total: ${formattedTotalSum}*`);
+    }
 
     return formattedResponse.join("\n");
   } catch (error) {
