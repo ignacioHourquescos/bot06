@@ -55,19 +55,15 @@ client.on("message", (msg) => {
   const { from, to, body, deviceType } = msg;
 
   async function handleIncomingMessage(msg: any) {
-    if (from == "5491165106333@c.us") {
-      try {
-        const intentionDetected = await detectIntention(from, msg.body);
-        if (intentionDetected) {
-          client.sendMessage(from, intentionDetected);
-        } else {
-          client.sendMessage(from, welcomeFlow());
-        }
-      } catch (error) {
-        console.error("Error detecting intention:", error);
+    try {
+      const intentionDetected = await detectIntention(from, msg.body);
+      if (intentionDetected) {
+        client.sendMessage(from, intentionDetected);
+      } else {
+        client.sendMessage(from, welcomeFlow());
       }
-    } else {
-      return;
+    } catch (error) {
+      console.error("Error detecting intention:", error);
     }
   }
 
