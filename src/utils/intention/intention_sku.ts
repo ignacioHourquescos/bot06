@@ -13,11 +13,10 @@ async function intentionSku(message: string): Promise<any> {
     let parsedResponse = "";
     for (let item of response) {
       parsedResponse +=
-        `${item.s > 30 ? "✅" : "🟨"}` +
-        ` *${item.id} ⇒ $${item.p} + IVA*` +
+        `${item.s > 10 ? "🟢" : "🟡"}` +
+        ` *${item.id} ⇒ $${item.p}*` +
         `\n       _${item.d}_ \n`;
     }
-
     return parsedResponse;
   } catch (error) {
     console.error("Error fetching data for SKU:", error);
@@ -25,5 +24,4 @@ async function intentionSku(message: string): Promise<any> {
   }
 }
 
-// Example usage:
 export default intentionSku;
